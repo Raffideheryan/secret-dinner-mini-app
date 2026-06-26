@@ -137,7 +137,7 @@ function DinnerCard({
             <path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z" />
             <circle cx="12" cy="10" r="3" />
           </svg>
-          <span>{t(language, "secretLocation")}</span>
+          <span>{dinner.location || t(language, "secretLocation")}</span>
         </div>
 
         {/* Stats row: registered / seats left / table */}
@@ -236,16 +236,6 @@ export function DinnersScreen({
             {t(language, "dinners")}
             <span className="dp-header__sparkle"> ✦✦</span>
           </h1>
-          <button className="dp-filter-icon" aria-label="Filter" disabled>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="4" y1="6" x2="20" y2="6" />
-              <line x1="8" y1="12" x2="20" y2="12" />
-              <line x1="12" y1="18" x2="20" y2="18" />
-              <circle cx="4" cy="6" r="1.5" fill="currentColor" stroke="none" />
-              <circle cx="8" cy="12" r="1.5" fill="currentColor" stroke="none" />
-              <circle cx="12" cy="18" r="1.5" fill="currentColor" stroke="none" />
-            </svg>
-          </button>
         </div>
         <p className="dp-header__sub">{t(language, "discoverDinners")}</p>
       </div>
@@ -304,7 +294,7 @@ export function DinnerDetailCard({
         />
       </div>
       <h3 className="dinner-card__title">{dinner.description}</h3>
-      <p className="dinner-card__location">{t(language, "secretLocation")}</p>
+      <p className="dinner-card__location">{dinner.location || t(language, "secretLocation")}</p>
       <div className="dinner-stats">
         <div className="stat-tile">
           <span>{t(language, "registered")}</span>

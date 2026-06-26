@@ -39,6 +39,7 @@ export interface NextDinner {
   places: number;
   alreadyRegistered: number;
   dinnerDate: string;
+  location?: string;
   silverSeats: number;
   goldSeats: number;
   vipSeats: number;

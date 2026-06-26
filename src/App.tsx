@@ -9,6 +9,7 @@ import type {
   DinnerRecord,
   Language,
   MiniAppApplication,
+  PackageType,
   ProfileDraft,
   ReservationDraft,
   ReserveStep,
@@ -42,6 +43,38 @@ function toReservationDraft(user: BootstrapResponse["user"]): ReservationDraft {
     tablePreference: "shared",
     acceptLegalTerms: user.termsAccepted,
   };
+}
+
+function getPackageLimits(dinner: import("./types").NextDinner | null): Record<PackageType, number> {
+  if (!dinner) return { silver: Infinity, gold: Infinity, vip: Infinity };
+  const a = dinner.availability;
+  return {
+    silver: a.silverLimited ? Math.max(0, a.silverRemaining) : Infinity,
+    gold: a.goldLimited ? Math.max(0, a.goldRemaining) : Infinity,
+    vip: a.vipLimited ? Math.max(0, a.vipRemaining) : Infinity,
+  };
+}
+
+// Reassign each guest's package so no package exceeds its seat limit.
+// Guests earlier in the array have priority; later guests are bumped to the
+// next available package when the current one is full.
+function clampPackagesToLimits(
+  packages: PackageType[],
+  limits: Record<PackageType, number>,
+  available: PackageType[],
+): PackageType[] {
+  const used: Record<PackageType, number> = { silver: 0, gold: 0, vip: 0 };
+  return packages.map((pkg) => {
+    // Find the first package starting from `pkg` (then cycling through available)
+    // that still has capacity.
+    const order = [
+      ...available.slice(available.indexOf(pkg) === -1 ? 0 : available.indexOf(pkg)),
+      ...available.slice(0, available.indexOf(pkg) === -1 ? available.length : available.indexOf(pkg)),
+    ];
+    const chosen = order.find((p) => used[p] < limits[p]) ?? available[available.length - 1] ?? pkg;
+    used[chosen] = (used[chosen] ?? 0) + 1;
+    return chosen;
+  });
 }
 
 export default function App() {
@@ -284,6 +317,21 @@ export default function App() {
     setReserveStep(1);
     setSubmitted(false);
     setReserveMode(true);
+    // Recompute the dinner for the newly selected id so limits are fresh.
+    const record = dinners.find((d) => d.id === dinnerId);
+    const dinner = record
+      ? mapDinnerRecordToNextDinner(
+          record,
+          bootstrap?.nextDinner?.id === dinnerId ? bootstrap.nextDinner.availability : undefined,
+        )
+      : selectedDinner;
+    const pkgs = getAvailablePackages(dinner);
+    const limits = getPackageLimits(dinner);
+    setReservationDraft((current) => {
+      if (!current) return current;
+      const raw = Array.from({ length: current.guestCount }, (_, i) => current.guestPackages[i] ?? pkgs[0] ?? "silver") as PackageType[];
+      return { ...current, guestPackages: clampPackagesToLimits(raw, limits, pkgs) };
+    });
   }
 
   function handleBackToDinners() {
@@ -299,10 +347,12 @@ export default function App() {
       }
       const nextCount = Math.max(1, count);
       const fallback = availablePackages[0] ?? "silver";
+      const raw = Array.from({ length: nextCount }, (_, index) => current.guestPackages[index] ?? fallback);
+      const limits = getPackageLimits(selectedDinner);
       return {
         ...current,
         guestCount: nextCount,
-        guestPackages: Array.from({ length: nextCount }, (_, index) => current.guestPackages[index] ?? fallback),
+        guestPackages: clampPackagesToLimits(raw, limits, availablePackages),
       };
     });
   }

@@ -110,6 +110,7 @@ export function mapDinnerRecordToNextDinner(
     places,
     alreadyRegistered,
     dinnerDate: dinner.dinnerDate,
+    location: dinner.location,
     silverSeats,
     goldSeats,
     vipSeats,

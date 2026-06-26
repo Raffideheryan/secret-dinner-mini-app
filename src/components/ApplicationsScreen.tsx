@@ -293,16 +293,6 @@ export function ApplicationsScreen({
             </h1>
             <p className="ap-header__sub">{t(language, "applicationsSubtitle")}</p>
           </div>
-          <div className="ap-filter-icon" aria-hidden="true">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="4" y1="6" x2="20" y2="6" />
-              <circle cx="4" cy="6" r="1.5" fill="currentColor" stroke="none" />
-              <line x1="8" y1="12" x2="20" y2="12" />
-              <circle cx="8" cy="12" r="1.5" fill="currentColor" stroke="none" />
-              <line x1="12" y1="18" x2="20" y2="18" />
-              <circle cx="12" cy="18" r="1.5" fill="currentColor" stroke="none" />
-            </svg>
-          </div>
         </div>
       </div>
 
@@ -325,9 +315,6 @@ export function ApplicationsScreen({
       {/* Section label */}
       <div className="ap-section-header">
         <span className="ap-section-header__title">{t(language, "upcomingApplications")}</span>
-        <button className="ap-section-header__link" onClick={() => handleFilterChange("all")}>
-          {t(language, "viewPast")} →
-        </button>
       </div>
 
       {/* List / empty */}
