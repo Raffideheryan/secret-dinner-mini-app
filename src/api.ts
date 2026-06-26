@@ -48,12 +48,12 @@ export async function fetchApplications(): Promise<MiniAppApplication[]> {
   const response = await apiFetch<{ applications: MiniAppApplication[] }>(
     "/telegram-mini/applications",
   );
-  return response.applications;
+  return response.applications ?? [];
 }
 
 export async function fetchDinners(): Promise<DinnerRecord[]> {
   const response = await apiFetch<{ dinners: DinnerRecord[] }>("/dinners/info");
-  return response.dinners;
+  return response.dinners ?? [];
 }
 
 export async function updateProfile(body: {
