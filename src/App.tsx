@@ -325,16 +325,38 @@ export default function App() {
 
   if (error) {
     const hasTelegramContext = Boolean(getTelegramInitData());
+    const isAuthError = error.toLowerCase().includes("initdata") || error.toLowerCase().includes("unauthorized") || error.toLowerCase().includes("auth");
+    const botUsername = (import.meta.env.VITE_BOT_USERNAME as string | undefined)?.replace(/^@/, "") ?? "";
+    const botUrl = botUsername ? `https://t.me/${botUsername}` : "https://t.me";
     return (
-      <ScreenMessage
-        title={error}
-        body={hasTelegramContext ? undefined : t("english", "appRequiresTelegram")}
-        action={
-          <button className="primary-button full-width" onClick={() => void loadAll()}>
-            {t("english", "retry")}
+      <div className="err-screen">
+        <div className="err-screen__glow" />
+        <div className="err-screen__card">
+          <div className="err-screen__icon">
+            <svg width="36" height="32" viewBox="0 0 32 29" fill="currentColor">
+              <path d="M17 4L17 2L19 2C19.553 2 20 1.553 20 1C20 0.448 19.553 0 19 0L13 0C12.447 0 12 0.448 12 1C12 1.553 12.447 2 13 2L15 2L15 4C6.632 4.519 0 11.501 0 20L0 21C0 21.553 0.447 22 1 22L31 22C31.553 22 32 21.553 32 21L32 20C32 11.501 25.368 4.519 17 4Z" />
+              <path d="M31 24L1 24C0.447 24 0 24.448 0 25C0 25.553 0.447 26 1 26L31 26C31.553 26 32 25.553 32 25C32 24.448 31.553 24 31 24Z" />
+            </svg>
+          </div>
+          <h1 className="err-screen__title">Secret Dinner</h1>
+          <p className="err-screen__subtitle">
+            {isAuthError || !hasTelegramContext
+              ? "This app runs inside Telegram. Open it through the bot to access your Secret Dinner experience."
+              : error}
+          </p>
+          {(!hasTelegramContext || isAuthError) && botUsername ? (
+            <a className="err-screen__tg-btn" href={botUrl} target="_blank" rel="noopener noreferrer">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.88 13.47l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.834.95z"/>
+              </svg>
+              Open in Telegram
+            </a>
+          ) : null}
+          <button className="err-screen__retry" onClick={() => void loadAll()}>
+            Try again
           </button>
-        }
-      />
+        </div>
+      </div>
     );
   }
 

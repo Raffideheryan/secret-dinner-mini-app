@@ -4931,3 +4931,119 @@ h3 {
   max-width: 280px;
   line-height: 1.5;
 }
+
+/* ═══════════════════════════════════════════════
+   err-screen  ERROR / NO AUTH SCREEN
+═══════════════════════════════════════════════ */
+
+.err-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg, #070807);
+  padding: 24px;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+}
+
+.err-screen__glow {
+  position: absolute;
+  top: -120px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 340px;
+  height: 340px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(185, 130, 34, 0.18) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.err-screen__card {
+  position: relative;
+  z-index: 1;
+  background: var(--surface, #111514);
+  border: 1px solid rgba(214, 180, 90, 0.2);
+  border-radius: 24px;
+  padding: 36px 28px 32px;
+  width: 100%;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow:
+    0 0 0 1px rgba(214, 180, 90, 0.06),
+    0 32px 64px rgba(0, 0, 0, 0.5);
+}
+
+.err-screen__icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: rgba(214, 180, 90, 0.1);
+  border: 1px solid rgba(214, 180, 90, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold, #D6B45A);
+  margin-bottom: 20px;
+}
+
+.err-screen__title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--text, #F5F1E8);
+  margin: 0 0 10px;
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+
+.err-screen__subtitle {
+  font-size: 0.88rem;
+  color: var(--text-secondary, #B9B0A0);
+  text-align: center;
+  line-height: 1.6;
+  margin: 0 0 28px;
+  max-width: 280px;
+}
+
+.err-screen__tg-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  background: linear-gradient(180deg, #e8cc7a 0%, #D6B45A 100%);
+  color: #0a0a0a;
+  font-size: 0.95rem;
+  font-weight: 800;
+  padding: 15px 20px;
+  border-radius: 16px;
+  text-decoration: none;
+  margin-bottom: 12px;
+  box-shadow: 0 8px 24px rgba(185, 130, 34, 0.35);
+  letter-spacing: 0.01em;
+  box-sizing: border-box;
+}
+
+.err-screen__tg-btn:active {
+  background: var(--gold-dark, #B98222);
+}
+
+.err-screen__retry {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary, #B9B0A0);
+  font-size: 0.82rem;
+  padding: 10px 24px;
+  border-radius: 12px;
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.err-screen__retry:active {
+  border-color: rgba(214, 180, 90, 0.3);
+  color: var(--gold, #D6B45A);
+}
